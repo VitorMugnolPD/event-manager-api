@@ -20,11 +20,11 @@ const getFuncionario = (request, response) => {
 }
 
 const addEvento = (request, response) => {
-  const {tipoevento, subtipo, datahora, localizacao, idOrganizador} = request.body
+  const {tipoevento, subtipo, datahora, localizacao, idorganizador} = request.body
 
   pool.query(
     'insert into CrowdMeet.evento (tipoevento, subtipo, datahora, localizacao, idOrganizador) values ($1, $2, $3, $4, $5)',
-    [tipoevento, subtipo, datahora, localizacao, idOrganizador],
+    [tipoevento, subtipo, datahora, localizacao, idorganizador],
     (error) => {
       if (error) {
         throw error
@@ -36,22 +36,22 @@ const addEvento = (request, response) => {
 
 const deleteEvento = (request, response) => {
   const {id} = request.body
-  // pool.query('delete from CrowdMeet.Evento e using CrowdMeet.Participantes p where p.evento = $1 and e.id = $1', [id], (error, results) => {
+  pool.query('delete from CrowdMeet.Evento e using CrowdMeet.Participantes p where p.evento = $1 and e.id = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).json({status: 'success', message: 'Evento apagado.'})
+  })
+  // pool.query('delete from CrowdMeet.Participantes where evento = $1', [id], (error, results) => {
   //   if (error) {
   //     throw error
   //   }
-  //   response.status(201).json({status: 'success', message: 'Evento adicionado.'})
   // })
-  pool.query('delete from CrowdMeet.Participantes where evento = $1', [id], (error, results) => {
-    if (error) {
-      throw error
-    }
-  })
-  pool.query('DELETE FROM CrowdMeet.Evento where id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
-    }
-  })
+  // pool.query('DELETE FROM CrowdMeet.Evento where id = $1', [id], (error, results) => {
+  //   if (error) {
+  //     throw error
+  //   }
+  // })
 }
 
 const getEvento = (request, response) => {
@@ -75,7 +75,7 @@ const getEvento = (request, response) => {
 }
 
 const updateEvento = (request, response) => {
-  const {id, localizacao, datahora, tipoevento, subtipo, idorganizador} = request.body
+  const {id, localizacao, datahora, tipoevento, subtipo} = request.body
   pool.query('update CrowdMeet.evento set ' + 
   'localizacao = $1, tipoevento = $2, subtipo = $3, datahora = $4 where id = $5',
   [localizacao, tipoevento, subtipo, datahora, id], (error, results) => {
