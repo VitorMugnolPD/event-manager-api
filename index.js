@@ -20,11 +20,11 @@ const getFuncionario = (request, response) => {
 }
 
 const addEvento = (request, response) => {
-  const {tipo, subtipo, datahora, localizacao, idOrganizador} = request.body
+  const {tipoevento, subtipo, datahora, localizacao, idOrganizador} = request.body
 
   pool.query(
     'insert into CrowdMeet.evento (tipoevento, subtipo, datahora, localizacao, idOrganizador) values ($1, $2, $3, $4, $5)',
-    [tipo, subtipo, datahora, localizacao, idOrganizador],
+    [tipoevento, subtipo, datahora, localizacao, idOrganizador],
     (error) => {
       if (error) {
         throw error
@@ -82,6 +82,7 @@ const updateEvento = (request, response) => {
     if (error) {
       throw error
     }
+    response.status(200)
   })
 }
 
