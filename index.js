@@ -81,6 +81,46 @@ app.delete("/participantesevento/:id", (request, response) => {
   })
 })
 
+app.get("funcionariosevento/:id", (request, response) => {
+  const {id} = request.params
+  pool.query('SELECT * FROM CrowdMeet.participantes where evento = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+})
+
+app.get("timesequipesevento/:id", (request, response) => {
+  const {id} = request.params
+  pool.query('SELECT * FROM CrowdMeet.participantestimeequipe where evento = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+})
+
+app.get("departamentosevento/:id", (request, response) => {
+  const {id} = request.params
+  pool.query('SELECT * FROM CrowdMeet.participantesdepartamento where evento = $1', [id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+})
+
+app.delete("participanteid/:idFuncionario/:idEvento", (request, response) => {
+  const {idFuncionario, idEvento} = request.params
+  pool.query('delete from CrowdMeet.participantes where evento = $1 and funcionario = $2', [idEvento, idFuncionario], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).json({status: 'success', message: 'Participante apagado.'})
+  })
+})
+
 const getEvento = (request, response) => {
   const {id} = request.body
   if(id == null){
@@ -109,7 +149,7 @@ const updateEvento = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200)
+    response.status(201).json({status: 'success', message: 'Evento alterado.'})
   })
 }
 
